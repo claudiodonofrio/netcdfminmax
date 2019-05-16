@@ -6,7 +6,7 @@ A defined _FillValue for a variable is skipped in the output.
 At the time of writing, a "missing_value" is not masked
 and will be considered for min/max value.
 
-Example result:
+Example result in JSON format:
 
 {
 	"lon": {
