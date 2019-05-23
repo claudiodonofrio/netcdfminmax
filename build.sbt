@@ -15,8 +15,9 @@ lazy val root = (project in file("."))
     libraryDependencies ++= Seq(
         scalaTest % Test,
         "edu.ucar" % "netcdf4" % "4.6.13",
-        "org.slf4j" % "slf4j-log4j12" % "1.7.26"
-    )
+        "org.slf4j" % "slf4j-log4j12" % "1.7.26",
+        "io.spray" %% "spray-json" % "1.3.4"
+)
 )
 // https://mvnrepository.com/artifact/org.slf4j/slf4j-log4j12
 // See https://www.scala-sbt.org/1.x/docs/Using-Sonatype.html for instructions on how to publish to Sonatype.
