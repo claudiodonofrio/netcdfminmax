@@ -1,5 +1,7 @@
 
 
+import java.nio.file.{Path, Paths}
+
 import netcdf.{CdfVarRange, fileHash}
 import org.apache.log4j.{BasicConfigurator, Logger}
 
@@ -22,15 +24,15 @@ object Benchmark {
     // -----------------------------------------------------
 
 
-    val minmax= new CdfVarRange()
     val hash= new fileHash()
 
-    var benchmarkfiles:ListBuffer[String] = ListBuffer()
-    benchmarkfiles += "test_files/pr_monthly_19900101-19901231.nc"
-    benchmarkfiles += "test_files/ingos222.nc"
-    benchmarkfiles += "test_files/nep_qd_2010-2015.nc"
-    benchmarkfiles += "test_files/edgar.nc"
-    benchmarkfiles += "test_files/mrros_6hr_19920101-19921231.nc"
+    val benchmarkfiles: Seq[Path] = Seq(
+      "test_files/pr_monthly_19900101-19901231.nc",
+      "test_files/ingos222.nc",
+      "test_files/nep_qd_2010-2015.nc",
+      "test_files/edgar.nc",
+      "test_files/mrros_6hr_19920101-19921231.nc"
+    ).map(fn => Paths.get(fn))
 
     // to big for standard heap size
     //benchmarkfiles += "test_files/tas_3hr_20010101-20011231.nc"
@@ -46,17 +48,17 @@ object Benchmark {
     var t3:Double = 0.0
 
     for (f <- benchmarkfiles) {
-      minmax.fileName = f
+      val minmax= new CdfVarRange(f)
       println("processing " + f)
       t1 = System.nanoTime.toDouble
       minmax.getVarList
       t2 = (System.nanoTime - t1) / 1e9d
-      resultMinMax += (f -> t2)
+      resultMinMax += (f.toString -> t2)
 
       t1 = System.nanoTime
       println(hash.computeHash(f))
       t3 = (System.nanoTime - t1) / 1e9d
-      resultHash += (f -> t3)
+      resultHash += (f.toString -> t3)
 
       diff += (t2 - t3)
     }
